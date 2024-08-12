@@ -5,9 +5,13 @@
         </h2>
     </x-slot>
     <div class="w-full p-6 overflow-x-scroll">
-        <div class="flex w-max space-x-6 h-[calc(theme('height.screen')-64px-73px-theme('padding.12'))]">
+        <div 
+            class="flex w-max space-x-6 h-[calc(theme('height.screen')-64px-73px-theme('padding.12'))]"
+            wire:sortable="sortOrder">
             @foreach ($columns as $column)
-                <livewire:column wire:key="$column->id" :column="$column" />
+            <div wire:key="{{ $column->id }}" wire:sortable.item="{{ $column->id }}">
+                <livewire:column :key="$column->id" :column="$column" />
+            </div>
             @endforeach
         </div>
     </div>
