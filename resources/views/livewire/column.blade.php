@@ -48,6 +48,32 @@
         @endforeach
     </div>
     <div class="p-3">
-        Create Card
+        <div x-data="{ adding:false }" x-on:card-created.window="adding = false">
+                        <template x-if="adding">
+                            <form wire:submit="createCard">
+                                <div>
+                                    <x-input-label for="title" value="Title" class="sr-only" />
+                                    <x-text-input id="title" placeholder="Card title" class="w-full" wire:model='createCardForm.title'
+                                        x-init="$el.focus()" />
+                                    <x-input-error :messages="$errors->get('createCardForm.title')" class="mt-1" />
+                                </div>
+                                <div class="flex items-center space-x-3 mt-2">
+                                    <x-primary-button>
+                                        Create
+                                    </x-primary-button>
+                                    <button type="button" class="text-sm text-gray-500 ml-2" x-on:click="adding = false">Cancel</button>
+                                </div>
+                            </form>
+                        </template>
+                        <button class="flex items-center space-x-2" x-show="!adding"
+                            x-on:click="adding = true">
+                            <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor"
+                                class="size-5">
+                                <path stroke-linecap="round" stroke-linejoin="round"
+                                    d="M12 9v6m3-3H9m12 0a9 9 0 1 1-18 0 9 9 0 0 1 18 0Z" />
+                            </svg>
+                            <span>Add a Card</span>
+                        </button>
+                    </div>
     </div>
 </div>
