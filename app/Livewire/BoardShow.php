@@ -2,6 +2,7 @@
 
 namespace App\Livewire;
 
+use App\Livewire\Forms\CreateColumn;
 use App\Models\Card;
 use App\Models\Board;
 use App\Models\Column;
@@ -12,9 +13,11 @@ use Illuminate\Database\Eloquent\Builder;
 class BoardShow extends Component
 {
     public Board $board;
-    
-    #[Layout('layouts.app')]    
-    
+
+    public CreateColumn $createColumnForm;
+
+    #[Layout('layouts.app')]
+
     public function mount()
     {
         $this->authorize('show', $this->board);
@@ -23,23 +26,33 @@ class BoardShow extends Component
     public function sortOrder(array $items)
     {
         $newOrder = collect($items)->pluck('value')->toArray();
-        Column::setNewOrder($newOrder, modifyQuery: fn (Builder $query) => $query->whereBelongsTo(auth()->user()));
+        Column::setNewOrder($newOrder, modifyQuery: fn(Builder $query) => $query->whereBelongsTo(auth()->user()));
     }
     public function moved(array $items)
     {
         collect($items)->recursive()->each(function ($column) {
             $columnId = $column->get('value');
             $newOrderForCards = $column->get('items')->pluck('value')->toArray();
-            $cards = Card::whereUserId(auth()->id())
+            Card::whereBelongsTo(auth()->user())
                 ->find($newOrderForCards)
                 ->where('column_id', '!=', $columnId)
                 ->each->update(['column_id' => $columnId]);
 
-            Card::setNewOrder($newOrderForCards, modifyQuery: fn(Builder $query) => $query->whereBelongsTo(auth()->user()));    
+            Card::setNewOrder($newOrderForCards, modifyQuery: fn(Builder $query) => $query->whereBelongsTo(auth()->user()));
         });
+    }
 
-        
-        // dd($items);
+    public function createColumn()
+    {
+        $this->createColumnForm->validate();
+
+        $column = $this->board->columns()->make($this->createColumnForm->only('title'));
+        $column->user()->associate(auth()->user());
+        $column->save();
+
+        $this->createColumnForm->reset();
+
+        $this->dispatch('column-created');
     }
 
     public function render()
