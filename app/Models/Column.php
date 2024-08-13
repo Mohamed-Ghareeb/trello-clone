@@ -12,6 +12,8 @@ use Spatie\EloquentSortable\SortableTrait;
 class Column extends Model implements Sortable
 {
     use HasFactory, SortableTrait;
+    
+    protected $guarded = ['id'];
 
     public $sortable = [
         'order_column_name' => 'order',
