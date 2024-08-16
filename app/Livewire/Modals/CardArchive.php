@@ -23,7 +23,7 @@ class CardArchive extends ModalComponent
     public function render()
     {
         return view('livewire.modals.card-archive', [
-            'cards' => $this->board->cards()->archived()->get()
+            'cards' => $this->board->cards()->archived()->latesetArchived()->get()
         ]);
     }
 }

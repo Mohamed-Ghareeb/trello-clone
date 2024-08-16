@@ -2,6 +2,7 @@
 
 namespace App\Models;
 
+use App\Models\Traits\Archivable;
 use Spatie\EloquentSortable\Sortable;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Builder;
@@ -12,14 +13,10 @@ use Illuminate\Database\Eloquent\Factories\HasFactory;
 
 class Column extends Model implements Sortable
 {
-    use HasFactory, SortableTrait;
+    use HasFactory, SortableTrait, Archivable;
     
     protected $guarded = ['id'];
 
-    protected $casts = [
-        'archived_at' => 'datetime'
-    ];
-    
     public $sortable = [
         'order_column_name' => 'order',
         'sort_when_creating' => true,
@@ -38,15 +35,5 @@ class Column extends Model implements Sortable
     public function board(): BelongsTo
     {
         return $this->belongsTo(Board::class);
-    }
-    
-    public function scopeNotArchived(Builder $query)
-    {
-        return $query->whereNull('columns.archived_at');
-    }
-    
-    public function scopeArchived(Builder $query)
-    {
-        return $query->whereNotNull('columns.archived_at');
     }
 }
