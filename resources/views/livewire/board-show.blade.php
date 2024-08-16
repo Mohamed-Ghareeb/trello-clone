@@ -29,7 +29,7 @@
             class="flex w-max space-x-6 h-[calc(theme('height.screen')-64px-73px-theme('padding.12'))]"
             wire:sortable="sortOrder" 
             wire:sortable-group="moved" 
-            wire:sortable.options="{ animation: 250 }">
+            wire:sortable.options="{ animation: 250, ghostClass: 'opacity-20' }">
             @foreach ($columns as $column)
                 <div wire:key="{{ $column->id }}" wire:sortable.item="{{ $column->id }}">
                     <livewire:column :key="$column->id" :column="$column" />
