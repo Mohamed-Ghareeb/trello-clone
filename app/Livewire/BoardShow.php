@@ -19,7 +19,7 @@ class BoardShow extends Component
     protected $listeners = [
         'board-updated' => '$refresh'
     ];
-
+    
     public function mount()
     {
         $this->authorize('show', $this->board);
