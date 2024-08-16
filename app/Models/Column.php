@@ -22,6 +22,11 @@ class Column extends Model implements Sortable
         'sort_when_creating' => true,
     ];
 
+    public function buildSortQuery(): Builder
+    {
+        return static::query()->where('board_id', $this->board_id);
+    }
+
     public function cards(): HasMany
     {
         return $this->hasMany(Card::class);

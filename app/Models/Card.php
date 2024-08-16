@@ -21,6 +21,11 @@ class Card extends Model implements Sortable
         'sort_when_creating' => true,
     ];
 
+    public function buildSortQuery(): Builder
+    {
+        return static::query()->where('column_id', $this->column_id);
+    }
+
     public function user(): BelongsTo
     {
         return $this->belongsTo(User::class);
