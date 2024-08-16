@@ -16,6 +16,10 @@ class Column extends Model implements Sortable
     
     protected $guarded = ['id'];
 
+    protected $casts = [
+        'archived_at' => 'datetime'
+    ];
+    
     public $sortable = [
         'order_column_name' => 'order',
         'sort_when_creating' => true,
@@ -29,5 +33,15 @@ class Column extends Model implements Sortable
     public function user(): BelongsTo
     {
         return $this->belongsTo(User::class);
+    }
+
+    public function board(): BelongsTo
+    {
+        return $this->belongsTo(Board::class);
+    }
+    
+    public function scopeNotArchived(Builder $query)
+    {
+        return $query->whereNull('archived_at');
     }
 }

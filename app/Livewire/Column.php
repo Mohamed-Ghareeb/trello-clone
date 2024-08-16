@@ -21,13 +21,6 @@ class Column extends Component
         $this->editColumnForm->title = $this->column->title;
     }
 
-    public function updateColumn()
-    {
-        $this->editColumnForm->validate();
-        $this->column->update($this->editColumnForm->only('title'));
-        $this->dispatch('column-updated');
-    }
-
     public function createCard()
     {
         $this->createCardForm->validate();
@@ -39,6 +32,22 @@ class Column extends Component
         $this->createCardForm->reset();
 
         $this->dispatch('card-created');
+    }
+
+    public function updateColumn()
+    {
+        $this->editColumnForm->validate();
+        $this->column->update($this->editColumnForm->only('title'));
+        $this->dispatch('column-updated');
+    }
+
+    public function archiveColumn()
+    {
+        $this->column->update([
+            'archived_at' => now()
+        ]);
+
+        $this->dispatch('board-updated');
     }
 
     public function render()

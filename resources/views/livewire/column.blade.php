@@ -33,7 +33,9 @@
                     </svg>
                 </x-slot>
                 <x-slot name="content">
-                    drop
+                    <x-dropdown-button wire:click='archiveColumn'>
+                        Archive
+                    </x-dropdown-button>
                 </x-slot>
             </x-dropdown>
         </div>
